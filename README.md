@@ -8,7 +8,7 @@
 A production-grade e-commerce platform demonstrating modern DevOps practices, cloud-native architecture, and enterprise-level automation.
 
 ## 🏗️ Architecture
-
+'''
 ┌─────────────┐
 │ CloudFront│
 │ + WAF │
@@ -35,7 +35,7 @@ A production-grade e-commerce platform demonstrating modern DevOps practices, cl
 │PostgreSQL│ │ Redis │
 │ RDS │ │ElastiC.│
 └──────────┘ └────────┘
-
+'''
 ## ✨ Features
 
 ### Application Features
