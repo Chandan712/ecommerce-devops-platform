@@ -8,34 +8,67 @@
 A production-grade e-commerce platform demonstrating modern DevOps practices, cloud-native architecture, and enterprise-level automation.
 
 ## 🏗️ Architecture
-'''
-┌─────────────┐
-│ CloudFront│
-│ + WAF │
-└──────┬──────┘
-│
-┌──────▼──────────────────────────────────────┐
-│ Application Load Balancer │
-└──────┬──────────────────────────────────────┘
-│
-┌──────▼─────────────────┐
-│ API Gateway │
-│ (Rate Limiting, Auth) │
-└─┬────┬────┬────┬───────┘
-│ │ │ │
-▼ ▼ ▼ ▼
-┌───┐┌───┐┌───┐┌───┐
-│User││Prod││Order││Pay│
-│Svc ││Svc ││Svc ││Svc│
-└─┬─┘└─┬─┘└─┬─┘└─┬─┘
-│ │ │ │
-└────┴────┴────┘
-│
-┌────▼────┐ ┌────────┐
-│PostgreSQL│ │ Redis │
-│ RDS │ │ElastiC.│
-└──────────┘ └────────┘
-'''
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+    Internet([👥 Users/Internet])
+    
+    Internet --> CF
+    
+    subgraph AWS["☁️ AWS Cloud"]
+        direction TB
+        
+        CF[CloudFront + WAF]
+        ALB[Application Load Balancer]
+        
+        subgraph EKS["Kubernetes EKS Cluster"]
+            direction TB
+            Gateway[API Gateway<br/>Rate Limiting & Auth]
+            
+            subgraph Services["Microservices"]
+                direction LR
+                User[User<br/>Service]
+                Product[Product<br/>Service]
+                Order[Order<br/>Service]
+                Payment[Payment<br/>Service]
+            end
+        end
+        
+        subgraph Data["Data Layer"]
+            direction LR
+            Postgres[(PostgreSQL<br/>RDS)]
+            Redis[(Redis<br/>ElastiCache)]
+        end
+        
+        CF --> ALB
+        ALB --> Gateway
+        Gateway --> User
+        Gateway --> Product
+        Gateway --> Order
+        Gateway --> Payment
+        
+        User --> Postgres
+        Product --> Postgres
+        Order --> Postgres
+        Payment --> Postgres
+        
+        User -.-> Redis
+        Product -.-> Redis
+        Order -.-> Redis
+    end
+    
+    style CF fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    style ALB fill:#4ecdc4,stroke:#0a97b0,color:#fff
+    style Gateway fill:#45b7d1,stroke:#1864ab,color:#fff
+    style User fill:#96ceb4,stroke:#37b24d,color:#000
+    style Product fill:#96ceb4,stroke:#37b24d,color:#000
+    style Order fill:#96ceb4,stroke:#37b24d,color:#000
+    style Payment fill:#96ceb4,stroke:#37b24d,color:#000
+    style Postgres fill:#ffd93d,stroke:#f59f00,color:#000
+    style Redis fill:#fab1a0,stroke:#d63031,color:#000
+
 ## ✨ Features
 
 ### Application Features
