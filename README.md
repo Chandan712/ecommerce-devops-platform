@@ -9,48 +9,24 @@ A production-grade e-commerce platform demonstrating modern DevOps practices, cl
 
 ## 🏗️ Architecture
 
-### System Architecture Diagram
+### System Architecture
 
-```mermaid
-graph TD
-    Internet([Internet Users])
-    
-    subgraph AWS["AWS Cloud"]
-        CF[CloudFront + WAF]
-        ALB[Application Load Balancer]
-        Gateway[API Gateway]
-        
-        subgraph EKS["EKS Cluster"]
-            User[User Service]
-            Product[Product Service]
-            Order[Order Service]
-            Payment[Payment Service]
-        end
-        
-        DB[(PostgreSQL RDS)]
-        Cache[(Redis ElastiCache)]
-    end
-    
-    Internet --> CF
-    CF --> ALB
-    ALB --> Gateway
-    Gateway --> User
-    Gateway --> Product
-    Gateway --> Order
-    Gateway --> Payment
-    User --> DB
-    Product --> DB
-    Order --> DB
-    Payment --> DB
-    User -.-> Cache
-    Product -.-> Cache
-    
-    style CF fill:#f66,stroke:#c33,stroke-width:2px
-    style ALB fill:#6cf,stroke:#39c,stroke-width:2px
-    style Gateway fill:#6c6,stroke:#393,stroke-width:2px
-    style DB fill:#fc6,stroke:#c93,stroke-width:2px
-    style Cache fill:#f9f,stroke:#c6c,stroke-width:2px
-
+**Request Flow:**
+Internet
+↓
+CloudFront + WAF (CDN & Security)
+↓
+Application Load Balancer
+↓
+API Gateway (Rate Limiting & Auth)
+↓
+├─→ User Service (Port 3001)
+├─→ Product Service (Port 3002)
+├─→ Order Service (Port 3003)
+└─→ Payment Service (Port 3004)
+↓
+├─→ PostgreSQL (AWS RDS)
+└─→ Redis (AWS ElastiCache)
 ## ✨ Features
 
 ### Application Features
