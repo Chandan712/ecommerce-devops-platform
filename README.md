@@ -9,65 +9,47 @@ A production-grade e-commerce platform demonstrating modern DevOps practices, cl
 
 ## 🏗️ Architecture
 
-## 🏗️ Architecture
+### System Architecture Diagram
 
 ```mermaid
-flowchart TD
-    Internet([👥 Users/Internet])
+graph TD
+    Internet([Internet Users])
     
-    Internet --> CF
-    
-    subgraph AWS["☁️ AWS Cloud"]
-        direction TB
-        
+    subgraph AWS["AWS Cloud"]
         CF[CloudFront + WAF]
         ALB[Application Load Balancer]
+        Gateway[API Gateway]
         
-        subgraph EKS["Kubernetes EKS Cluster"]
-            direction TB
-            Gateway[API Gateway<br/>Rate Limiting & Auth]
-            
-            subgraph Services["Microservices"]
-                direction LR
-                User[User<br/>Service]
-                Product[Product<br/>Service]
-                Order[Order<br/>Service]
-                Payment[Payment<br/>Service]
-            end
+        subgraph EKS["EKS Cluster"]
+            User[User Service]
+            Product[Product Service]
+            Order[Order Service]
+            Payment[Payment Service]
         end
         
-        subgraph Data["Data Layer"]
-            direction LR
-            Postgres[(PostgreSQL<br/>RDS)]
-            Redis[(Redis<br/>ElastiCache)]
-        end
-        
-        CF --> ALB
-        ALB --> Gateway
-        Gateway --> User
-        Gateway --> Product
-        Gateway --> Order
-        Gateway --> Payment
-        
-        User --> Postgres
-        Product --> Postgres
-        Order --> Postgres
-        Payment --> Postgres
-        
-        User -.-> Redis
-        Product -.-> Redis
-        Order -.-> Redis
+        DB[(PostgreSQL RDS)]
+        Cache[(Redis ElastiCache)]
     end
     
-    style CF fill:#ff6b6b,stroke:#c92a2a,color:#fff
-    style ALB fill:#4ecdc4,stroke:#0a97b0,color:#fff
-    style Gateway fill:#45b7d1,stroke:#1864ab,color:#fff
-    style User fill:#96ceb4,stroke:#37b24d,color:#000
-    style Product fill:#96ceb4,stroke:#37b24d,color:#000
-    style Order fill:#96ceb4,stroke:#37b24d,color:#000
-    style Payment fill:#96ceb4,stroke:#37b24d,color:#000
-    style Postgres fill:#ffd93d,stroke:#f59f00,color:#000
-    style Redis fill:#fab1a0,stroke:#d63031,color:#000
+    Internet --> CF
+    CF --> ALB
+    ALB --> Gateway
+    Gateway --> User
+    Gateway --> Product
+    Gateway --> Order
+    Gateway --> Payment
+    User --> DB
+    Product --> DB
+    Order --> DB
+    Payment --> DB
+    User -.-> Cache
+    Product -.-> Cache
+    
+    style CF fill:#f66,stroke:#c33,stroke-width:2px
+    style ALB fill:#6cf,stroke:#39c,stroke-width:2px
+    style Gateway fill:#6c6,stroke:#393,stroke-width:2px
+    style DB fill:#fc6,stroke:#c93,stroke-width:2px
+    style Cache fill:#f9f,stroke:#c6c,stroke-width:2px
 
 ## ✨ Features
 
