@@ -9,6 +9,7 @@ A production-grade e-commerce platform demonstrating modern DevOps practices, cl
 
 ## 🏗️ Architecture
 
+'''
 ┌─────────────┐
 │ CloudFront│
 │ + WAF │
